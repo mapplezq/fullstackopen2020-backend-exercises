@@ -58,12 +58,27 @@ app.delete('/api/persons/:id', (req, res) => {
 app.post('/api/persons', (req, res) => {
   const body = req.body
 
-  // if (!body.con)
-  const randomId = Math.floor(Math.random() * Math.floor(10000))
+  // console.log('body.name: ', body.name);
+  // console.log('persons: ', persons);
+  const find = persons.filter(p => p.name === body.name)
+  // console.log('infd: ', find);
+  if (!body.name) {
+    return res.status(400).json({
+      error: 'name must be unique'
+    })
+  } else if (!body.number) {
+    return res.status(400).json({
+      error: 'number cannot be missing'
+    })
+  } else if ( find.length > 0) {
+      return res.status(400).json({
+        error: 'name has been already exist'
+      })
+    }
 
+  const randomId = Math.floor(Math.random() * Math.floor(10000))
   const person = req.body
   person.id = randomId
-
   persons = persons.concat(person)
 
   res.json(person)
