@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 
-const persons = 
+let persons = 
 [
   { 
     name: 'Arto Hellas', 
@@ -29,10 +29,28 @@ app.get('/api/persons', (req, res) => {
   res.json(persons)
 })
 
+app.get('/api/persons/:id', (req, res) => {
+  const id = Number(req.params.id)
+  const person = persons.find(person => person.id === id)
+
+  if (person) {
+    res.json(person) 
+  } else {
+    res.status(404).end()
+  }
+})
+
 app.get('/info', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/plain' });
   const info = `Phonebook has info for ${persons.length} \npeople ${new Date()}`
   res.end(info)
+})
+
+app.delete('/api/persons/:id', (req, res) => {
+  const id = Number(req.params.id)
+  persons = persons.filter(p => p.id !== id)
+
+  res.status(204).end()
 })
 
 
