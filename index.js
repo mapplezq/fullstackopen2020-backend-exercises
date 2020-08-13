@@ -64,7 +64,7 @@ app.get('/api/persons/:id', (req, res, next) => {
     .catch(error => next(error))
 })
 
-app.get('/info', (req, res) => {
+app.get('/info', (req, res, next) => {
   // res.writeHead(200, { 'Content-Type': 'text/plain' });
   // const info = `Phonebook has info for ${persons.length} \npeople ${new Date()}`
   // res.end(info)
@@ -77,7 +77,7 @@ app.get('/info', (req, res) => {
   })
 })
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
   // const id = Number(req.params.id)
   // persons = persons.filter(p => p.id !== id)
 
@@ -90,42 +90,53 @@ app.delete('/api/persons/:id', (req, res) => {
   // res.status(204).end()
 })
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
   const body = req.body
 
   // console.log('body.name: ', body.name);
   // console.log('persons: ', persons);
 
-  Contact.find({})
-    .then(contacts => {
-      const find = contacts.filter(c => c.name === body.name)
-      // console.log('infd: ', find);
-      if (!body.name) {
-        return res.status(400).json({
-          error: 'name must be unique'
-        })
-      } else if (!body.number) {
-        return res.status(400).json({
-          error: 'number cannot be missing'
-        })
-      } else if ( find.length > 0) {
-        return res.status(400).json({
-          error: 'name has been already exist'
-        })
-      }
+  // Contact.find({})
+  //   .then(contacts => {
+  //     const find = contacts.filter(c => c.name === body.name)
+  //     // console.log('infd: ', find);
+  //     if (!body.name) {
+  //       return res.status(400).json({
+  //         error: 'name must be unique'
+  //       })
+  //     } else if (!body.number) {
+  //       return res.status(400).json({
+  //         error: 'number cannot be missing'
+  //       })
+  //     } else if (find.length > 0) {
+  //       return res.status(400).json({
+  //         error: 'name has been already exist'
+  //       })
+  //     }
 
-      // const person = req.body
-      const contact = new Contact({
-        name: req.body.name,
-        number: req.body.number
-      })
+  //     // const person = req.body
+  //     const contact = new Contact({
+  //       name: req.body.name,
+  //       number: req.body.number
+  //     })
 
-      contact.save().then(savedContact => {
-        res.json(savedContact)
-      })
-      .catch(error => next(error))
-    })
-    .catch(error => next(error))
+  //     contact.save().then(savedContact => {
+  //       res.json(savedContact)
+  //     })
+  //     .catch(error => next(error))
+  //   })
+  //   .catch(error => next(error))
+
+  const contact = new Contact({
+    name: req.body.name,
+    number: req.body.number
+  })
+
+  contact.save().then(savedContact => {
+    res.json(savedContact)
+  })
+  .catch(error => next(error))
+
   // const randomId = Math.floor(Math.random() * Math.floor(10000))
   // const person = req.body
   // person.id = randomId
