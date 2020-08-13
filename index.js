@@ -152,12 +152,11 @@ app.put('/api/persons/:id', (req, res, next) => {
     number: body.number,
   }
 
-  Contact.findByIdAndUpdate(req.params.id, contact, { new: true })
+  Contact.findByIdAndUpdate(req.params.id, contact, { new: true, runValidators: true })
     .then(updatedContact => {
       res.json(updatedContact)
     })
     .catch(error => next(error))
-
 })
 
 const unknownEndpoint = (request, response) => {
@@ -172,6 +171,8 @@ const errorHandler = (error, req, res, next) => {
 
   if (error.name === 'CastError' && error.kind === 'ObjectId') {
     return res.status(400).send({ error: 'malformatted id' })
+  } else if(error.name === 'ValidationError') {
+    return res.status(400).json({ error: error.message })
   }
 
   next(error)
