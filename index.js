@@ -65,9 +65,16 @@ app.get('/api/persons/:id', (req, res, next) => {
 })
 
 app.get('/info', (req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  const info = `Phonebook has info for ${persons.length} \npeople ${new Date()}`
-  res.end(info)
+  // res.writeHead(200, { 'Content-Type': 'text/plain' });
+  // const info = `Phonebook has info for ${persons.length} \npeople ${new Date()}`
+  // res.end(info)
+
+  Contact.find({}).then(contacts => {
+    res.end(`Phonebook has info for ${contacts.length} \npeople ${new Date()}`)
+  })
+  .catch(error => {
+    next(error)
+  })
 })
 
 app.delete('/api/persons/:id', (req, res) => {
