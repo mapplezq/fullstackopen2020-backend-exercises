@@ -40,13 +40,16 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :b
 //   },
 // ]
 
-app.get('/api/persons', (req, res) => {
+app.get('/api/persons', (req, res, next) => {
   Contact.find({}).then(contacts => {
     res.json(contacts)
   })
+  .catch(error => {
+    next(error)
+  })
 })
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
   // const id = Number(req.params.id)
   // const person = persons.find(person => person.id === id)
 
@@ -58,6 +61,7 @@ app.get('/api/persons/:id', (req, res) => {
         res.status(404).end()
       }
     })
+    .catch(error => next(error))
 })
 
 app.get('/info', (req, res) => {
@@ -74,6 +78,7 @@ app.delete('/api/persons/:id', (req, res) => {
     .then(() => {
       res.status(204).end()
     })
+    .catch(error => next(error))
 
   // res.status(204).end()
 })
@@ -111,7 +116,9 @@ app.post('/api/persons', (req, res) => {
       contact.save().then(savedContact => {
         res.json(savedContact)
       })
+      .catch(error => next(error))
     })
+    .catch(error => next(error))
   // const randomId = Math.floor(Math.random() * Math.floor(10000))
   // const person = req.body
   // person.id = randomId
@@ -119,6 +126,41 @@ app.post('/api/persons', (req, res) => {
   // res.json(person)
 })
 
+app.put('/api/persons/:id', (req, res, next) => {
+  const body = req.body
+
+  const contact = {
+    name: body.name,
+    number: body.number,
+  }
+
+  Contact.findByIdAndUpdate(req.params.id, contact, { new: true })
+    .then(updatedContact => {
+      res.json(updatedContact)
+    })
+    .catch(error => next(error))
+
+})
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+// handler of requests with unknown endpoint
+app.use(unknownEndpoint)
+
+const errorHandler = (error, req, res, next) => {
+  console.log(error.message)
+
+  if (error.name === 'CastError' && error.kind === 'ObjectId') {
+    return res.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+
+// handler of requests with result to errors
+app.use(errorHandler)
 
 // const PORT = 3001
 const PORT = process.env.PORT || 3001
