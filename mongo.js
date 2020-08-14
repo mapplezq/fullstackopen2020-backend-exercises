@@ -38,6 +38,6 @@ Contact.find({})
     console.log('phonebook:')
     contacts.forEach(element => {
       console.log(`${element.name} ${element.number}`)
-    });
+    })
     mongoose.connection.close()
   })

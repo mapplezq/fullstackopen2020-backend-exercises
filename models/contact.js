@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 mongoose.set('useFindAndModify', false)
-mongoose.set('useCreateIndex', true);
+mongoose.set('useCreateIndex', true)
 const uniqueValidator = require('mongoose-unique-validator')
 
 const url = process.env.MONGODB_URI
@@ -8,7 +8,7 @@ const url = process.env.MONGODB_URI
 console.log('connecting to', url)
 
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(result => {
+  .then(() => {
     console.log('connected to MongoDB')
   })
   .catch((error) => {
@@ -16,13 +16,13 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
   })
 
 const contactSchema = new mongoose.Schema({
-  name: { 
-    type: String, 
-    required: true, 
+  name: {
+    type: String,
+    required: true,
     unique: true,
     minlength: 3
   },
-  number: { 
+  number: {
     type: String,
     minlength: 10,
   }
@@ -40,5 +40,3 @@ contactSchema.plugin(uniqueValidator)
 
 
 module.exports = mongoose.model('Contact', contactSchema)
-  
-  

@@ -16,25 +16,25 @@ morgan.token('body', function getBody (req) {
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
-// let persons = 
+// let persons =
 // [
-//   { 
-//     name: 'Arto Hellas', 
+//   {
+//     name: 'Arto Hellas',
 //     number: '040-123456',
 //     id: 1
 //   },
-//   { 
-//     name: 'Ada Lovelace', 
+//   {
+//     name: 'Ada Lovelace',
 //     number: '39-44-5323523',
 //     id: 2
 //   },
-//   { 
-//     name: 'Dan Abramov', 
+//   {
+//     name: 'Dan Abramov',
 //     number: '12-43-234345',
 //     id: 3
 //   },
-//   { 
-//     name: 'Mary Poppendieck', 
+//   {
+//     name: 'Mary Poppendieck',
 //     number: '39-23-6423122',
 //     id: 4
 //   },
@@ -44,9 +44,9 @@ app.get('/api/persons', (req, res, next) => {
   Contact.find({}).then(contacts => {
     res.json(contacts)
   })
-  .catch(error => {
-    next(error)
-  })
+    .catch(error => {
+      next(error)
+    })
 })
 
 app.get('/api/persons/:id', (req, res, next) => {
@@ -56,7 +56,7 @@ app.get('/api/persons/:id', (req, res, next) => {
   Contact.findById(req.params.id)
     .then(contact => {
       if (contact) {
-        res.json(contact) 
+        res.json(contact)
       } else {
         res.status(404).end()
       }
@@ -72,9 +72,9 @@ app.get('/info', (req, res, next) => {
   Contact.find({}).then(contacts => {
     res.end(`Phonebook has info for ${contacts.length} \npeople ${new Date()}`)
   })
-  .catch(error => {
-    next(error)
-  })
+    .catch(error => {
+      next(error)
+    })
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
@@ -91,7 +91,7 @@ app.delete('/api/persons/:id', (req, res, next) => {
 })
 
 app.post('/api/persons', (req, res, next) => {
-  const body = req.body
+  // const body = req.body
 
   // console.log('body.name: ', body.name);
   // console.log('persons: ', persons);
@@ -135,7 +135,7 @@ app.post('/api/persons', (req, res, next) => {
   contact.save().then(savedContact => {
     res.json(savedContact)
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 
   // const randomId = Math.floor(Math.random() * Math.floor(10000))
   // const person = req.body
@@ -184,5 +184,5 @@ app.use(errorHandler)
 // const PORT = 3001
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`)
 })
